@@ -9,6 +9,7 @@ import {
   useRenderButtons,
   useShowButtons,
 } from "../stores/menuStore";
+import BlurButton from "../components/buttons/BlurButton";
 
 export default function QuicksLayout() {
   const activeMenu = useActiveMenu();
@@ -21,7 +22,9 @@ export default function QuicksLayout() {
       <div
         className={`fixed flex ${
           activeMenu === "task" ? "flex-row-reverse" : "flex-row"
-        } right-8 bottom-5 z-50 gap-5 items-center`}
+        } right-8 bottom-5 z-50 ${
+          activeMenu === "quick" ? "gap-5" : "gap-7"
+        } items-center`}
       >
         {renderButtons && (
           <div
@@ -41,7 +44,11 @@ export default function QuicksLayout() {
               </p>
             )}
 
-            <TaskButton />
+            <div className="relative">
+              {activeMenu === "task" && <BlurButton />}
+
+              <TaskButton />
+            </div>
           </div>
         )}
 
@@ -64,7 +71,11 @@ export default function QuicksLayout() {
               </p>
             )}
 
-            <MessageButton />
+            <div className="relative">
+              {activeMenu === "inbox" && <BlurButton />}
+
+              <MessageButton />
+            </div>
           </div>
         )}
 
