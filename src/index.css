@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+:root {
+  --primary-core: #2f80ed;
+  --primary-second: #4f4f4f;
+  --primary-third: #828282;
+  --primary-fourth: #e0e0e0;
+}
+
+@theme {
+  --color-primary-core: var(--primary-core);
+  --color-primary-second: var(--primary-second);
+  --color-primary-third: var(--primary-third);
+  --color-primary-fourth: var(--primary-fourth);
+}
+
+body {
+  font-family: "Lato", sans-serif;
+}
