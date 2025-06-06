@@ -10,6 +10,9 @@ import {
   useShowButtons,
 } from "../stores/menuStore";
 import BlurButton from "../components/buttons/BlurButton";
+import InboxPopup from "../components/popups/InboxPopup";
+import TaskPopup from "../components/popups/TaskPopup";
+import { AnimatePresence } from "framer-motion";
 
 export default function QuicksLayout() {
   const activeMenu = useActiveMenu();
@@ -19,6 +22,11 @@ export default function QuicksLayout() {
 
   return (
     <div className="h-screen w-screen flex flex-row bg-[#333333]">
+      <AnimatePresence mode="wait">
+        {activeMenu === "inbox" && <InboxPopup key="inbox" />}
+        {activeMenu === "task" && <TaskPopup key="task" />}
+      </AnimatePresence>
+
       <div
         className={`fixed flex ${
           activeMenu === "task" ? "flex-row-reverse" : "flex-row"
@@ -87,6 +95,7 @@ export default function QuicksLayout() {
       </div>
 
       <div className="h-screen w-1/6 border-gray-100 border-r"></div>
+
       <div className="h-screen w-full flex flex-col">
         <div className="w-full h-7 bg-primary-second flex flex-row px-4">
           <button
