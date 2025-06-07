@@ -23,3 +23,12 @@ export const convertDateTimeToEpoch = (dateParam: string) => {
 
   return epoch;
 };
+
+export const convertDateTimeForFormatChat = (dateParam: number) => {
+  return moment.unix(dateParam).tz(localTimeZone).calendar(null, {
+    sameDay: "[Today], MMMM DD YYYY",
+    lastDay: "[Yesterday], MMMM DD YYYY",
+    lastWeek: "dddd, MMM DD YYYY",
+    sameElse: "dddd, MMMM DD YYYY",
+  });
+};

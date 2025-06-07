@@ -5,6 +5,7 @@ import MessageButton from "../components/buttons/MessageButton";
 import TaskButton from "../components/buttons/TaskButton";
 import {
   useActiveMenu,
+  useIsOpenMenu,
   useMenuActions,
   useRenderButtons,
   useShowButtons,
@@ -16,6 +17,7 @@ import { AnimatePresence } from "framer-motion";
 
 export default function QuicksLayout() {
   const activeMenu = useActiveMenu();
+  const isOpenMenu = useIsOpenMenu();
   const showButtons = useShowButtons();
   const renderButtons = useRenderButtons();
   const { toggleButtons } = useMenuActions();
@@ -23,8 +25,8 @@ export default function QuicksLayout() {
   return (
     <div className="h-screen w-screen flex flex-row bg-[#333333]">
       <AnimatePresence mode="wait">
-        {activeMenu === "inbox" && <InboxPopup key="inbox" />}
-        {activeMenu === "task" && <TaskPopup key="task" />}
+        {activeMenu === "inbox" && isOpenMenu && <InboxPopup key="inbox" />}
+        {activeMenu === "task" && isOpenMenu && <TaskPopup key="task" />}
       </AnimatePresence>
 
       <div

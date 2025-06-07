@@ -16,6 +16,7 @@
     "@mui/material": "^7.1.1",
     "@mui/styled-engine-sc": "^7.1.1",
     "@tailwindcss/vite": "^4.1.8",
+    "axios": "^1.9.0",
     "framer-motion": "^12.16.0",
     "moment-timezone": "^0.6.0",
     "react": "^19.1.0",
@@ -23,6 +24,7 @@
     "react-router": "^7.6.2",
     "styled-components": "^6.1.18",
     "tailwindcss": "^4.1.8",
+    "uuid": "^11.1.0",
     "zustand": "^5.0.5"
   },
   "devDependencies": {
