@@ -227,6 +227,7 @@ export default function InboxPopup() {
     );
 
     scrollChatToBottom();
+    setChatSelected(null);
   };
 
   const handleChangeMessage = (event: FormEvent<HTMLTextAreaElement>) => {
@@ -423,7 +424,7 @@ export default function InboxPopup() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 30 }}
       transition={{ duration: 0.3 }}
-      className="w-full h-full flex flex-col max-w-1/3 max-h-3/4 bg-white text-black fixed right-8 bottom-26 z-50 rounded-md py-[19px]"
+      className="w-full h-full flex flex-col max-w-11/12 max-h-3/4 sm:min-w-[600px] sm:max-w-1/3 bg-white  fixed right-8 bottom-26 z-50 rounded-md py-[19px]"
     >
       {/* Header */}
       {!inboxSelected && (
@@ -664,9 +665,9 @@ export default function InboxPopup() {
                   "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a"
                   ? "bottom-[7.5rem]"
                   : "bottom-[4.5rem]"
-              } w-fit h-fit rounded-md flex items-center justify-center cursor-pointer z-10 bg-[#E9F3FF] px-[12px] py-2`}
+              } w-fit h-fit rounded-md flex items-center justify-center cursor-pointer z-10 bg-[#E9F3FF] hover:bg-[#CCE4FF] transition-colors duration-200 ease-in-out group px-[12px] py-2`}
             >
-              <p className="text-sm text-[#2F80ED] text-center text-nowrap">
+              <p className="text-sm text-[#2F80ED] group-hover:text-[#1C5BBF] transition-colors duration-200 ease-in-out text-center text-nowrap">
                 New Message
               </p>
             </button>
@@ -700,7 +701,7 @@ export default function InboxPopup() {
               role="button"
               aria-label="Submit"
               onClick={handleSubmitChat}
-              className="px-4 py-2 bg-[#2F80ED] rounded-md cursor-pointer h-full max-h-10"
+              className="px-4 py-2 bg-[#2F80ED] hover:bg-[#1366D6] transition-colors duration-200 ease-in-out rounded-md cursor-pointer h-full max-h-10"
             >
               <p className="text-white text-base">Submit</p>
             </button>

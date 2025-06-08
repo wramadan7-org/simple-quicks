@@ -213,10 +213,10 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
             </button>
 
             {isOpenExpandState && (
-              <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px]">
+              <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px] overflow-hidden shadow-sm">
                 <EditButton onClick={handleClickEditChat} />
 
-                <div className="h-[0.5px] w-full bg-[#BDBDBD]"></div>
+                <div className="h-[1px] w-full bg-[#BDBDBD]"></div>
 
                 <DeleteButton onClick={handleDeleteChat} />
               </div>
@@ -323,7 +323,7 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
             </button>
 
             {isOpenExpandState && (
-              <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px]">
+              <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px] overflow-hidden shadow-sm">
                 <DeleteButton onClick={handleDeleteChat} />
               </div>
             )}
