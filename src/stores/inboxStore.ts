@@ -24,6 +24,7 @@ type Action = {
 const useInboxStore = create<State & Action>((set) => ({
   inboxs: [
     {
+      id: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       status: "unread",
       name: "Cameron Phillips",
@@ -34,6 +35,7 @@ const useInboxStore = create<State & Action>((set) => ({
       participant: 2,
     },
     {
+      id: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
       idInbox: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
       status: "read",
       name: "Ellen",
@@ -44,6 +46,7 @@ const useInboxStore = create<State & Action>((set) => ({
       participant: 3,
     },
     {
+      id: "5d39ad56-1a2e-49f6-a60d-7ad96de0a71f",
       idInbox: "5d39ad56-1a2e-49f6-a60d-7ad96de0a71f",
       status: "read",
       name: "Cameron Phillips",
@@ -55,6 +58,7 @@ const useInboxStore = create<State & Action>((set) => ({
       participant: 5,
     },
     {
+      id: "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a",
       idInbox: "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a",
       status: "read",
       name: null,

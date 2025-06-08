@@ -1,4 +1,5 @@
 export type ChatType = {
+  id?: string;
   idChat: string;
   idInbox: string;
   name: string;

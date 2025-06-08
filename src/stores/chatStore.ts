@@ -25,6 +25,7 @@ type Action = {
 const chatStore = create<State & Action>((set) => ({
   chats: [
     {
+      id: "1234-1234-3221-4331",
       idChat: "1234-1234-3221-4331",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "Mary Hilda",
@@ -38,6 +39,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-1212",
       idChat: "1234-1234-3221-1212",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "You",
@@ -52,6 +54,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-2312",
       idChat: "1234-1234-3221-2312",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "Mary Hilda",
@@ -66,6 +69,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-3071",
       idChat: "1234-1234-3221-3071",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "You",
@@ -80,6 +84,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-8391",
       idChat: "1234-1234-3221-8391",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "Mary Hilda",
@@ -93,6 +98,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-8392",
       idChat: "1234-1234-3221-8392",
       idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
       name: "Obaidullah Amarkhil",
@@ -106,6 +112,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-9101",
       idChat: "1234-1234-3221-9101",
       idInbox: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
       name: "Ellen",
@@ -119,6 +126,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-9102",
       idChat: "1234-1234-3221-9102",
       idInbox: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
       name: "You",
@@ -132,6 +140,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-9201",
       idChat: "1234-1234-3221-9201",
       idInbox: "5d39ad56-1a2e-49f6-a60d-7ad96de0a71f",
       name: "Cameron Phillips",
@@ -146,6 +155,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-9202",
       idChat: "1234-1234-3221-9202",
       idInbox: "5d39ad56-1a2e-49f6-a60d-7ad96de0a71f",
       name: "You",
@@ -159,6 +169,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "user",
     },
     {
+      id: "1234-1234-3221-9301",
       idChat: "1234-1234-3221-9301",
       idInbox: "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a",
       name: "FastVisa Support",
@@ -173,6 +184,7 @@ const chatStore = create<State & Action>((set) => ({
       createdBy: "system",
     },
     {
+      id: "1234-1234-3221-9302",
       idChat: "1234-1234-3221-9302",
       idInbox: "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a",
       name: "You",

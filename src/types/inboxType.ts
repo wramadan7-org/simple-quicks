@@ -1,4 +1,5 @@
 export type InboxType = {
+  id?: string;
   idInbox: string;
   status: string;
   name?: string | null;

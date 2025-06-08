@@ -16,6 +16,7 @@ import {
   useChatIsEdit,
   useChatSelected,
 } from "../../stores/chatStore";
+import axios from "axios";
 
 type InboxChatProps = {
   type: "own" | "other";
@@ -120,7 +121,11 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
       try {
         if (!idChat) return;
 
-        setUpdateChatById(idChat, { ...chatSelected, message: messageState });
+        await axios.patch("https://jsonplaceholder.typicode.com/comments/1", {
+          message: messageState,
+        });
+
+        setUpdateChatById(idChat, { message: messageState });
       } catch (error) {
         console.error(error);
       } finally {
@@ -128,7 +133,7 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
         setIsEdit(false);
       }
     },
-    [chatSelected, messageState, setIsEdit, setUpdateChatById]
+    [messageState, setIsEdit, setUpdateChatById]
   );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
