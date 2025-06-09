@@ -8,7 +8,7 @@
       "from": "109220-Naturalization",
       "message": "Please check this out!",
       "datetime": 1622524740,
-      "createBy": "user",
+      "groupCategory": "user",
       "participant": 2
     },
     {
@@ -19,7 +19,7 @@
       "from": "Jeannette Moraima Guaman Chamba (Hutto I-589) [ Hutto Follow Up - Brief Service ]",
       "message": "Hey, please read.",
       "datetime": 1622605500,
-      "createBy": "user",
+      "groupCategory": "user",
       "participant": 3
     },
     {
@@ -30,7 +30,7 @@
       "from": "8405-Diana SALAZAR MUNGUIA",
       "message": "I understand your initial concerns and thats very valid, Elizabeth. But you shouldn`t be concerned about it. You are not alone. You are not the only one who is going through this.",
       "datetime": 1622524740,
-      "createBy": "user",
+      "groupCategory": "user",
       "participant": 5
     },
     {
@@ -41,7 +41,7 @@
       "from": "FastVisa Support",
       "message": "Hey there! Welcome to your inbox.",
       "datetime": 1609497000,
-      "createBy": "system",
+      "groupCategory": "system",
       "participant": 0
     }
   ],
@@ -58,7 +58,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-1212",
@@ -72,7 +72,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-2312",
@@ -86,7 +86,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-3071",
@@ -100,7 +100,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-8391",
@@ -114,7 +114,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-8392",
@@ -128,7 +128,7 @@
       "isReply": false,
       "isNew": true,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-9101",
@@ -142,7 +142,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-9102",
@@ -156,7 +156,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-9201",
@@ -170,7 +170,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-9202",
@@ -184,7 +184,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     },
     {
       "id": "1234-1234-3221-9301",
@@ -198,7 +198,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "system"
+      "groupCategory": "system"
     },
     {
       "id": "1234-1234-3221-9302",
@@ -212,7 +212,7 @@
       "isReply": false,
       "isNew": false,
       "isRead": true,
-      "createdBy": "user"
+      "groupCategory": "user"
     }
   ]
 }

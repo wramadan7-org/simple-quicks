@@ -9,7 +9,7 @@ export const defaultInboxValues: InboxType[] = [
     from: "109220-Naturalization",
     message: "Please check this out!",
     datetime: 1622524740,
-    createBy: "user",
+    groupCategory: "user",
     participant: 2,
   },
   {
@@ -20,7 +20,7 @@ export const defaultInboxValues: InboxType[] = [
     from: "Jeannette Moraima Guaman Chamba (Hutto I-589) [ Hutto Follow Up - Brief Service ]",
     message: "Hey, please read.",
     datetime: 1622605500,
-    createBy: "user",
+    groupCategory: "user",
     participant: 3,
   },
   {
@@ -32,7 +32,7 @@ export const defaultInboxValues: InboxType[] = [
     message:
       "I understand your initial concerns and thats very valid, Elizabeth. But you shouldn`t be concerned about it. You are not alone. You are not the only one who is going through this.",
     datetime: 1622524740,
-    createBy: "user",
+    groupCategory: "user",
     participant: 5,
   },
   {
@@ -43,7 +43,7 @@ export const defaultInboxValues: InboxType[] = [
     from: "FastVisa Support",
     message: "Hey there! Welcome to your inbox.",
     datetime: 1609497000,
-    createBy: "system",
+    groupCategory: "system",
     participant: 0,
   },
 ];

@@ -141,5 +141,11 @@ pre {
 .react-datepicker__month-text--today,
 .react-datepicker__quarter-text--today,
 .react-datepicker__year-text--today {
-  color: var(--color-primary-core) !important;
+  color: var(--color-primary-second) !important;
+  font-weight: 400 !important;
+}
+
+.custom-datepicker-popper {
+  z-index: 9999 !important;
+  transform: translate(107px, 40px) !important;
 }

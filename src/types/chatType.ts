@@ -11,5 +11,7 @@ export type ChatType = {
   isNew: boolean;
   isReply: boolean;
   isRead: boolean;
-  createdBy: "user" | "system";
+  groupCategory: GroupCategoryType;
 };
+
+export type GroupCategoryType = "user" | "system";

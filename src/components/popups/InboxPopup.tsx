@@ -40,8 +40,14 @@ import {
 import moment from "moment-timezone";
 import { v4 as uuidv4 } from "uuid";
 import { CircularProgress } from "@mui/material";
-import axios from "axios";
-import type { ChatType } from "../../types/chatType";
+import type { ChatType, GroupCategoryType } from "../../types/chatType";
+import {
+  getChats,
+  getInboxs,
+  patchChat,
+  patchInbox,
+  postChat,
+} from "../../service/inbox";
 
 export default function InboxPopup() {
   let newMessageShown = false;
@@ -76,11 +82,7 @@ export default function InboxPopup() {
   const fetchInboxs = useCallback(
     async (search?: string) => {
       try {
-        await axios.get(
-          `https://jsonplaceholder.typicode.com/posts${
-            search ? `?search=${search}` : ""
-          }`
-        );
+        await getInboxs(search);
 
         if (search) {
           const searching = inboxs?.filter(
@@ -94,9 +96,6 @@ export default function InboxPopup() {
         } else {
           setInboxsState(inboxs);
         }
-
-        // Set the response from api in that hook of the store
-        // setInboxs(response);
       } catch (error) {
         console.error(error);
         setInboxs([]);
@@ -112,10 +111,7 @@ export default function InboxPopup() {
   const updateInboxById = useCallback(
     async (idInbox: string, updatedInbox: Partial<InboxType>) => {
       try {
-        await axios.patch(
-          `https://jsonplaceholder.typicode.com/posts/${1}`,
-          updatedInbox
-        );
+        await patchInbox(idInbox, updatedInbox);
 
         setUpdateInboxById(idInbox, updatedInbox);
       } catch (error) {
@@ -129,7 +125,7 @@ export default function InboxPopup() {
   const sendChats = useCallback(
     async (chat: ChatType) => {
       try {
-        await axios.post("https://jsonplaceholder.typicode.com/comments", chat);
+        await postChat(chat);
 
         setSendChat(chat);
       } catch (error) {
@@ -140,25 +136,25 @@ export default function InboxPopup() {
     [setSendChat]
   );
 
-  const fetchChats = useCallback(async () => {
-    try {
-      await axios.get("https://jsonplaceholder.typicode.com/comments");
+  const fetchChats = useCallback(
+    async (idInbox: string) => {
+      try {
+        await getChats(idInbox);
 
-      // Set the response from api in that hook of the store
-      // setChats(response);
-    } catch (error) {
-      console.error(error);
-      setChats([]);
-    }
-  }, [setChats]);
+        // Set the response from api in that hook of the store
+        // setChats(response);
+      } catch (error) {
+        console.error(error);
+        setChats([]);
+      }
+    },
+    [setChats]
+  );
 
   const updateChatById = useCallback(
     async (idChat: string, updatedChat: Partial<ChatType>) => {
       try {
-        await axios.patch(
-          `https://jsonplaceholder.typicode.com/comments/${1}`,
-          updatedChat
-        );
+        await patchChat(idChat, updatedChat);
 
         setUpdateChatById(idChat, updatedChat);
       } catch (error) {
@@ -226,6 +222,24 @@ export default function InboxPopup() {
       })
     );
 
+    const sortedChats = chats
+      ?.filter((item) => item?.idInbox === inboxSelected?.idInbox)
+      ?.sort((a, b) => a.datetime - b.datetime);
+    const lastChat = sortedChats?.[sortedChats.length - 1];
+
+    const payloadInbox = {
+      ...inboxSelected,
+      idChat: lastChat?.idChat,
+      name: lastChat?.name,
+      status: "read",
+      message: lastChat?.message,
+      datetime: lastChat?.datetime,
+    };
+
+    if (!inboxSelected?.id) throw new Error("Inbox not found");
+
+    await updateInboxById(inboxSelected.id, payloadInbox);
+
     scrollChatToBottom();
     setChatSelected(null);
   };
@@ -251,22 +265,25 @@ export default function InboxPopup() {
   const handleSubmitChat = useCallback(async () => {
     if (!inboxSelected) return;
 
+    const uuid = uuidv4();
+
+    const payload = {
+      id: uuid,
+      idChat: uuid,
+      idInbox: inboxSelected?.idInbox,
+      name: "You",
+      from: inboxSelected?.from || "",
+      to: inboxSelected?.from || "",
+      message: messageState,
+      datetime: Number(convertDateTimeToEpoch(new Date())),
+      isReply: false,
+      isNew: false,
+      isRead: true,
+      groupCategory: "user" as GroupCategoryType,
+    };
+
     try {
-      await sendChats({
-        idChat: uuidv4(),
-        idInbox: inboxSelected?.idInbox,
-        name: "You",
-        from: inboxSelected?.from || "",
-        to: inboxSelected?.from || "",
-        message: messageState,
-        datetime: Number(
-          convertDateTimeToEpoch(moment().format("YYYY-MM-DD HH:mm:ss"))
-        ),
-        isReply: false,
-        isNew: false,
-        isRead: true,
-        createdBy: "user",
-      });
+      await sendChats(payload);
 
       const filteredChats = chats?.filter(
         (item) => item?.isNew && item?.idInbox === inboxSelected?.idInbox
@@ -284,12 +301,11 @@ export default function InboxPopup() {
 
       const payloadInbox = {
         ...inboxSelected,
+        idChat: uuid,
         name: "You",
         status: "read",
         message: messageState,
-        datetime: Number(
-          convertDateTimeToEpoch(moment().format("YYYY-MM-DD HH:mm:ss"))
-        ),
+        datetime: Number(convertDateTimeToEpoch(new Date())),
       };
 
       if (!inboxSelected?.id) throw new Error("Inbox not found");
@@ -341,7 +357,9 @@ export default function InboxPopup() {
   useEffect(() => {
     if (!isOpenMenu || activeMenu !== "inbox" || !inboxSelected) return;
 
-    fetchChats();
+    if (!inboxSelected?.id) return;
+
+    fetchChats(inboxSelected?.id);
   }, [activeMenu, fetchChats, inboxSelected, isOpenMenu]);
 
   useEffect(() => {
@@ -388,7 +406,7 @@ export default function InboxPopup() {
 
     const timeout = setTimeout(async () => {
       const uuid = uuidv4();
-      sendChats({
+      const payload = {
         id: uuid,
         idChat: uuid,
         idInbox: "8c197e93-6d2e-4aa4-b5b3-2b0df02fb0ae",
@@ -396,24 +414,36 @@ export default function InboxPopup() {
         from: "109220-Naturalization",
         to: "109220-Naturalization",
         message: "You’r welcome, Obaidullah.",
-        datetime: Number(
-          convertDateTimeToEpoch(moment().format("YYYY-MM-DD HH:mm:ss"))
-        ),
+        datetime: Number(convertDateTimeToEpoch(new Date())),
         isReply: false,
         isNew: true,
         isRead: false,
-        createdBy: "user",
-      });
+        groupCategory: "user" as GroupCategoryType,
+      };
 
+      sendChats(payload);
       scrollChatToBottom();
+
+      if (!inboxSelected?.id) throw new Error("Inbox not found");
+
+      const payloadInbox = {
+        ...inboxSelected,
+        idChat: uuid,
+        name: "Mary Hilda",
+        status: "unread",
+        message: "You’r welcome, Obaidullah.",
+        datetime: Number(convertDateTimeToEpoch(new Date())),
+      };
+
+      updateInboxById(inboxSelected.id, payloadInbox);
     }, 3000);
     return () => clearTimeout(timeout);
-  }, [inboxSelected, scrollChatToBottom, sendChats]);
+  }, [inboxSelected, scrollChatToBottom, sendChats, updateInboxById]);
 
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       handleSearchInbox(searchQueryState);
-    }, 500); // 500ms debounce
+    }, 500);
 
     return () => clearTimeout(delayDebounce);
   }, [searchQueryState, handleSearchInbox]);
@@ -501,7 +531,7 @@ export default function InboxPopup() {
                     </div>
 
                     <div className="max-w-11/12 overflow-hidden">
-                      {item?.createBy === "user" && (
+                      {item?.groupCategory === "user" && (
                         <p className="text-sm font-bold">{item?.name} :</p>
                       )}
                       <p className="text-sm text-ellipsis overflow-hidden line-clamp-1">
@@ -544,7 +574,7 @@ export default function InboxPopup() {
                   {inboxSelected?.from}
                 </p>
 
-                {inboxSelected?.createBy === "user" && (
+                {inboxSelected?.groupCategory === "user" && (
                   <p className="text-sm">
                     {inboxSelected?.participant} Participants
                   </p>

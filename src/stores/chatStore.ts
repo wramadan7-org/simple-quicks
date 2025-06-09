@@ -36,7 +36,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-1212",
@@ -51,7 +51,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-2312",
@@ -66,7 +66,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-3071",
@@ -81,7 +81,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-8391",
@@ -95,7 +95,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-8392",
@@ -109,7 +109,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: true,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-9101",
@@ -123,7 +123,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-9102",
@@ -137,7 +137,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-9201",
@@ -152,7 +152,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-9202",
@@ -166,7 +166,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
     {
       id: "1234-1234-3221-9301",
@@ -181,7 +181,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "system",
+      groupCategory: "system",
     },
     {
       id: "1234-1234-3221-9302",
@@ -195,7 +195,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      createdBy: "user",
+      groupCategory: "user",
     },
   ],
   loading: false,

@@ -14,9 +14,11 @@ import type { ChatType } from "../../types/chatType";
 import {
   useChatActions,
   useChatIsEdit,
+  useChats,
   useChatSelected,
 } from "../../stores/chatStore";
-import axios from "axios";
+import { deleteChat, patchChat } from "../../service/inbox";
+import { useInboxActions, useInboxSelected } from "../../stores/inboxStore";
 
 type InboxChatProps = {
   type: "own" | "other";
@@ -51,10 +53,13 @@ const conditionColor = {
 };
 
 export default function InboxChat({ type, chat }: InboxChatProps) {
+  const chats = useChats();
   const chatIsEdit = useChatIsEdit();
   const chatSelected = useChatSelected();
   const { setChatSelected, setDeleteChatById, setIsEdit, setUpdateChatById } =
     useChatActions();
+  const inboxSelected = useInboxSelected();
+  const { setUpdateInboxById } = useInboxActions();
 
   const menuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -91,9 +96,29 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
     handleExpand();
   };
 
-  const handleDeleteChat = () => {
+  const handleDeleteChat = async () => {
     if (chat) {
+      await deleteChat(chat.idChat);
       setDeleteChatById(chat.idChat);
+
+      console.log("DELETE", chat);
+      if (chat.idInbox !== inboxSelected?.idInbox) return;
+
+      console.log("SAMA");
+
+      const sortedChats = chats
+        ?.filter((item) => item?.idInbox === inboxSelected?.idInbox)
+        ?.sort((a, b) => a.datetime - b.datetime);
+      const lastChat = sortedChats?.[sortedChats.length - 2];
+      console.log("LAST: ", lastChat);
+      const payloadInbox = {
+        ...inboxSelected,
+        message: lastChat?.message,
+        name: lastChat?.name,
+        datetime: lastChat?.datetime,
+        idChat: lastChat?.idChat,
+      };
+      setUpdateInboxById(inboxSelected?.idInbox, payloadInbox);
     }
 
     handleExpand();
@@ -121,11 +146,22 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
       try {
         if (!idChat) return;
 
-        await axios.patch("https://jsonplaceholder.typicode.com/comments/1", {
-          message: messageState,
-        });
-
+        await patchChat(idChat, { message: messageState });
         setUpdateChatById(idChat, { message: messageState });
+
+        if (
+          idChat !== inboxSelected?.idChat ||
+          inboxSelected?.idInbox !== chatSelected?.idInbox
+        )
+          return;
+
+        const payloadInbox = {
+          ...inboxSelected,
+          message: messageState,
+          name: chatSelected?.name,
+        };
+
+        setUpdateInboxById(inboxSelected?.idInbox, payloadInbox);
       } catch (error) {
         console.error(error);
       } finally {
@@ -133,7 +169,15 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
         setIsEdit(false);
       }
     },
-    [messageState, setIsEdit, setUpdateChatById]
+    [
+      chatSelected?.idInbox,
+      chatSelected?.name,
+      inboxSelected,
+      messageState,
+      setIsEdit,
+      setUpdateChatById,
+      setUpdateInboxById,
+    ]
   );
 
   const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
