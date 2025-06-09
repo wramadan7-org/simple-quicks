@@ -515,9 +515,9 @@ export default function TaskCard(task: TaskType) {
                     formTaskState?.bookmarks?.map((bookmark, index) => (
                       <div
                         key={`${bookmark?.name}-${index}`}
-                        className={`py-1.5 px-2 rounded-md flex items-center justify-center ${bookmarkBackgroundColors(
-                          bookmark?.name
-                        )}`}
+                        className={`py-1.5 px-2 rounded-md flex items-center justify-center ${
+                          bookmarkBackgroundColors(bookmark?.name)?.background
+                        }`}
                       >
                         <p className="text-xs font-semibold">
                           {bookmark?.name}
@@ -536,7 +536,9 @@ export default function TaskCard(task: TaskType) {
                         key={`${bookmark?.name}-${index}`}
                         role="button"
                         className={`cursor-pointer py-1.5 px-2 rounded-md flex items-center justify-start shadow-sm transition-colors duration-200 ease-in-out
-                        ${bookmarkBackgroundColors(bookmark?.name)}
+                        ${
+                          bookmarkBackgroundColors(bookmark?.name)?.background
+                        } ${bookmarkBackgroundColors(bookmark?.name)?.hover}
                         ${
                           isBookmarkSelected(task, bookmark)
                             ? "border border-[#2F80ED]"
