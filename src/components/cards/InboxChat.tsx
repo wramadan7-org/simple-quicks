@@ -261,7 +261,7 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
 
         <div className="flex flex-col gap-1">
           {chat?.isReply && (
-            <div className="bg-[#E0E0E0] p-2 min-w-22 rounded-md text-sm w-fit">
+            <div className="bg-[#E0E0E0] p-2 min-w-22 rounded-md text-sm w-fit ml-auto">
               <pre className="text-start text-wrap text-sm">
                 {chats?.find((item) => item.idChat === chat?.idReply)?.message}
               </pre>
