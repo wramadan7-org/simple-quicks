@@ -34,6 +34,7 @@ import {
 import {
   useChatActions,
   useChatIsEdit,
+  useChatIsReply,
   useChats,
   useChatSelected,
 } from "../../stores/chatStore";
@@ -56,6 +57,8 @@ export default function InboxPopup() {
   const chats = useChats();
   const chatSelected = useChatSelected();
   const chatIsEdit = useChatIsEdit();
+  const chatIsReply = useChatIsReply();
+
   const inboxSelected = useInboxSelected();
   const { setInboxs, setInboxSelected, setUpdateInboxById } = useInboxActions();
   const { setCloseMenu, setActiveMenu } = useMenuActions();
@@ -64,6 +67,7 @@ export default function InboxPopup() {
     setSendChat,
     setUpdateChatById,
     setIsEdit,
+    setIsReply,
     setChatSelected,
   } = useChatActions();
   const isOpenMenu = useIsOpenMenu();
@@ -207,6 +211,11 @@ export default function InboxPopup() {
     setActiveMenu("quick");
   };
 
+  const handleCancelReply = () => {
+    setIsReply(false);
+    setChatSelected(null);
+  };
+
   const handleClickShowNewMessage = async () => {
     if (!inboxSelected) return;
 
@@ -267,7 +276,7 @@ export default function InboxPopup() {
 
     const uuid = uuidv4();
 
-    const payload = {
+    const payload: ChatType = {
       id: uuid,
       idChat: uuid,
       idInbox: inboxSelected?.idInbox,
@@ -285,8 +294,14 @@ export default function InboxPopup() {
         : "user") as GroupCategoryType,
     };
 
+    if (chatIsReply) {
+      payload.idReply = chatSelected?.id;
+      payload.isReply = true;
+    }
+
     try {
       await sendChats(payload);
+      setIsReply(false);
 
       const filteredChats = chats?.filter(
         (item) => item?.isNew && item?.idInbox === inboxSelected?.idInbox
@@ -337,12 +352,15 @@ export default function InboxPopup() {
       setIsEdit(false);
     }
   }, [
+    chatIsReply,
+    chatSelected?.id,
     chats,
     inboxSelected,
     messageState,
     scrollChatToBottom,
     sendChats,
     setIsEdit,
+    setIsReply,
     updateChatById,
     updateInboxById,
   ]);
@@ -387,7 +405,7 @@ export default function InboxPopup() {
     if (inboxSelected && inputRef.current) {
       inputRef.current.focus();
     }
-  }, [inboxSelected]);
+  }, [chatIsReply, inboxSelected, chatSelected]);
 
   useEffect(() => {
     const textArea = inputRef.current;
@@ -721,13 +739,43 @@ export default function InboxPopup() {
               </div>
             )}
 
-          <div className="flex flex-row flex-nowrap items-end gap-[13px] px-5">
+          <div className="flex flex-row flex-nowrap items-end gap-[13px] px-5 relative">
+            {chatIsReply && (
+              <div className="bg-[#F2F2F2] px-4 py-2 flex flex-col gap-1 ml-5 mr-[7.17rem] rounded-t-md absolute bottom-full left-0 border-t border-x border-[#828282] w-full max-w-[465.48px]">
+                <div className="flex flex-row flex-nowrap gal-3 items-center justify-between">
+                  <p className="text-xs font-semibold text-[#4f4f4f]">
+                    Reply to {chatSelected?.name}
+                  </p>
+
+                  <button
+                    type="button"
+                    role="button"
+                    onClick={handleCancelReply}
+                    className="w-2.5 h-2.5 min-w-2.5 min-h-2.5 my-auto ml-auto cursor-pointer"
+                    aria-label="Cancel Reply"
+                  >
+                    <img
+                      src={CloseIcon}
+                      alt="Cancel Reply"
+                      className="w-2.5 h-2.5 min-w-2.5 min-h-2.5"
+                    />
+                  </button>
+                </div>
+
+                <pre className="text-xs text-[#4f4f4f] text-start text-wrap">
+                  {chatSelected?.message}
+                </pre>
+              </div>
+            )}
+
             <textarea
               ref={inputRef}
               placeholder="Type a message"
               rows={1}
               value={messageState}
-              className="w-full rounded-md px-4 py-2 text-[#333333] border border-[#828282] text-sm resize-none min-h-10"
+              className={`w-full ${
+                chatIsReply ? "rounded-b-md" : "rounded-md"
+              } px-4 py-2 text-[#333333] border border-[#828282] text-sm resize-none min-h-10 mt-auto outline-none`}
               onChange={handleChangeMessage}
               onKeyDown={handleKeyDown}
             />

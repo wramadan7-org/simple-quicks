@@ -5,6 +5,7 @@ type State = {
   chats: ChatType[];
   chatSelected: ChatType | null;
   isEdit: boolean;
+  isReply: boolean;
   loading: boolean;
   error: boolean;
 };
@@ -14,6 +15,7 @@ type Action = {
     setChats: (chats: ChatType[]) => void;
     setChatSelected: (chat: ChatType | null) => void;
     setIsEdit: (isEdit: boolean) => void;
+    setIsReply: (isEdit: boolean) => void;
     setSendChat: (chat: ChatType) => void;
     setUpdateChatById: (idChat: string, updatedChat: Partial<ChatType>) => void;
     setDeleteChatById: (idChat: string) => void;
@@ -202,10 +204,12 @@ const chatStore = create<State & Action>((set) => ({
   error: false,
   chatSelected: null,
   isEdit: false,
+  isReply: false,
   actions: {
     setChats: (chats) => set({ chats }),
     setChatSelected: (chat) => set({ chatSelected: chat }),
     setIsEdit: (isEdit) => set({ isEdit }),
+    setIsReply: (isReply) => set({ isReply }),
     setSendChat: (chat) => set((state) => ({ chats: [chat, ...state.chats] })),
     setUpdateChatById: (idChat: string, updatedChat: Partial<ChatType>) =>
       set((state) => ({
@@ -225,6 +229,7 @@ const chatStore = create<State & Action>((set) => ({
 export const useChats = () => chatStore((state) => state.chats);
 export const useChatSelected = () => chatStore((state) => state.chatSelected);
 export const useChatIsEdit = () => chatStore((state) => state.isEdit);
+export const useChatIsReply = () => chatStore((state) => state.isReply);
 export const useChatLoading = () => chatStore((state) => state.loading);
 export const useChatError = () => chatStore((state) => state.error);
 export const useChatActions = () => chatStore((state) => state.actions);

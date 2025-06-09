@@ -19,6 +19,7 @@ import {
 } from "../../stores/chatStore";
 import { deleteChat, patchChat } from "../../service/inbox";
 import { useInboxActions, useInboxSelected } from "../../stores/inboxStore";
+import BonusButton from "../buttons/BonusButton";
 
 type InboxChatProps = {
   type: "own" | "other";
@@ -56,8 +57,13 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
   const chats = useChats();
   const chatIsEdit = useChatIsEdit();
   const chatSelected = useChatSelected();
-  const { setChatSelected, setDeleteChatById, setIsEdit, setUpdateChatById } =
-    useChatActions();
+  const {
+    setChatSelected,
+    setDeleteChatById,
+    setIsEdit,
+    setIsReply,
+    setUpdateChatById,
+  } = useChatActions();
   const inboxSelected = useInboxSelected();
   const { setUpdateInboxById } = useInboxActions();
 
@@ -81,6 +87,7 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
 
     if (chat) {
       setIsEdit(true);
+      setIsReply(false);
       setChatSelected(chat);
     }
 
@@ -93,6 +100,12 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
       });
     }
 
+    handleExpand();
+  };
+
+  const handleClickReplyChat = () => {
+    setIsReply(true);
+    setChatSelected(chat);
     handleExpand();
   };
 
@@ -247,79 +260,89 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
           You
         </p>
 
-        <div className="flex flex-row flex-nowrap justify-end gap-1">
-          <div ref={menuRef} className="w-fit h-fit relative">
-            <button
-              type="button"
-              role="button"
-              aria-label="Expand"
-              onClick={handleExpand}
-              className="flex items-start justify-center w-4 h-4 cursor-pointer"
-            >
-              <img src={ExpandChatIcon} alt="Expand" className="w-4 h-4" />
-            </button>
-
-            {isOpenExpandState && (
-              <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px] overflow-hidden shadow-sm">
-                <EditButton onClick={handleClickEditChat} />
-
-                <div className="h-[1px] w-full bg-[#BDBDBD]"></div>
-
-                <DeleteButton onClick={handleDeleteChat} />
-              </div>
-            )}
-          </div>
-
-          <div
-            ref={chatWrapperRef}
-            className={`flex flex-col gap-[12px] w-fit ${
-              conditionColor?.[
-                chat?.name
-                  ?.split(" ")
-                  ?.join("")
-                  ?.toLowerCase() as keyof typeof conditionColor
-              ]?.background
-            } rounded-md p-2 text-sm min-w-22`}
-          >
-            {chatIsEdit && chatSelected?.idChat === chat?.idChat ? (
-              <>
-                <textarea
-                  ref={inputRef}
-                  placeholder="Type a message"
-                  rows={1}
-                  value={messageState}
-                  className="w-full rounded-md px-4 py-2 text-[#333333] border border-[#828282] text-sm resize-none min-h-10"
-                  onChange={handleChangeMessage}
-                  onKeyDown={handleKeyDown}
-                />
-
-                <div className="flex flex-row gap-2 items-center justify-end">
-                  <button
-                    type="button"
-                    className="cursor-pointer rounded-full px-3 py-1 bg-white hover:bg-neutral-100 transition-colors duration-200 ease-in-out"
-                    onClick={handleCancelEditChat}
-                  >
-                    Cancel
-                  </button>
-
-                  <button
-                    type="button"
-                    className="cursor-pointer rounded-full px-3 py-1 bg-[#d5adfb] text-white hover:bg-[#b87df9] transition-colors duration-200 ease-in-out"
-                    onClick={() => handleSubmitChat(chat?.idChat)}
-                  >
-                    Submit
-                  </button>
-                </div>
-              </>
-            ) : (
+        <div className="flex flex-col gap-1">
+          {chat?.isReply && (
+            <div className="bg-[#E0E0E0] p-2 min-w-22 rounded-md text-sm w-fit">
               <pre className="text-start text-wrap text-sm">
-                {chat?.message}
+                {chats?.find((item) => item.idChat === chat?.idReply)?.message}
               </pre>
-            )}
+            </div>
+          )}
 
-            <p className="text-xs text-start">
-              {formatDate(chat?.datetime || "-", "HH:mm")}
-            </p>
+          <div className="flex flex-row flex-nowrap justify-end gap-1">
+            <div ref={menuRef} className="w-fit h-fit relative">
+              <button
+                type="button"
+                role="button"
+                aria-label="Expand"
+                onClick={handleExpand}
+                className="flex items-start justify-center w-4 h-4 cursor-pointer"
+              >
+                <img src={ExpandChatIcon} alt="Expand" className="w-4 h-4" />
+              </button>
+
+              {isOpenExpandState && (
+                <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px] overflow-hidden shadow-sm">
+                  <div className="border-b border-[#BDBDBD]">
+                    <EditButton onClick={handleClickEditChat} />
+                  </div>
+
+                  <DeleteButton onClick={handleDeleteChat} />
+                </div>
+              )}
+            </div>
+
+            <div
+              ref={chatWrapperRef}
+              className={`flex flex-col gap-[12px] w-fit ${
+                conditionColor?.[
+                  chat?.name
+                    ?.split(" ")
+                    ?.join("")
+                    ?.toLowerCase() as keyof typeof conditionColor
+                ]?.background
+              } rounded-md p-2 text-sm min-w-22`}
+            >
+              {chatIsEdit && chatSelected?.idChat === chat?.idChat ? (
+                <>
+                  <textarea
+                    ref={inputRef}
+                    placeholder="Type a message"
+                    rows={1}
+                    value={messageState}
+                    className="w-full rounded-md px-4 py-2 text-[#333333] border border-[#828282] text-sm resize-none min-h-10"
+                    onChange={handleChangeMessage}
+                    onKeyDown={handleKeyDown}
+                  />
+
+                  <div className="flex flex-row gap-2 items-center justify-end">
+                    <button
+                      type="button"
+                      className="cursor-pointer rounded-full px-3 py-1 bg-white hover:bg-neutral-100 transition-colors duration-200 ease-in-out"
+                      onClick={handleCancelEditChat}
+                    >
+                      Cancel
+                    </button>
+
+                    <button
+                      type="button"
+                      className="cursor-pointer rounded-full px-3 py-1 bg-[#d5adfb] text-white hover:bg-[#b87df9] transition-colors duration-200 ease-in-out"
+                      onClick={() => handleSubmitChat(chat?.idChat)}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <pre className="text-start text-wrap text-sm">
+                  {chat?.message}
+                </pre>
+              )}
+
+              <p className="text-xs text-start">
+                {formatDate(chat?.datetime || "-", "HH:mm")}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -371,6 +394,20 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
 
             {isOpenExpandState && (
               <div className="absolute top-full bg-white rounded-md border border-[#BDBDBD] min-w-[126px] overflow-hidden shadow-sm">
+                <div className="border-b border-[#BDBDBD]">
+                  <BonusButton
+                    displayText="Reply"
+                    onClick={handleClickReplyChat}
+                  />
+                </div>
+
+                <div className="border-b border-[#BDBDBD]">
+                  <BonusButton
+                    displayText="Share"
+                    onClick={() => console.log("Click Reply")}
+                  />
+                </div>
+
                 <DeleteButton onClick={handleDeleteChat} />
               </div>
             )}
