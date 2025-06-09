@@ -491,7 +491,7 @@ export default function TaskCard(task: TaskType) {
                 )}
               </div>
 
-              <div className="flex flex-row w-full gap-4 items-center justify-start bg-[#F9F9F9] rounded-md relative">
+              <div className="flex flex-row w-full gap-4 items-start justify-start bg-[#F9F9F9] pt-1 pb-1.5 rounded-md relative">
                 <button
                   type="button"
                   role="button"
@@ -506,7 +506,7 @@ export default function TaskCard(task: TaskType) {
                         : BookmarkGrayIcon
                     }
                     alt="Bookmars"
-                    className="w-4 h-4 min-w-4 min-h-4 mt-0.5"
+                    className="w-4 h-4 min-w-4 min-h-4"
                   />
                 </button>
 
