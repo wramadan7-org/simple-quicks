@@ -241,7 +241,6 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
       Number(textArea.style.height?.split("px")[0] || 45) > 45
         ? "scroll"
         : "hidden";
-    console.log(textArea.style.height);
   }, [messageState]);
 
   if (type === "own") {
