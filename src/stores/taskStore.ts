@@ -1,12 +1,18 @@
 import { create } from "zustand";
-import { type TaskType, type TypeTaskType } from "../types/taskType";
+import {
+  type Bookmark,
+  type TaskType,
+  type TypeTaskType,
+} from "../types/taskType";
 
 type State = {
   tasks: TaskType[];
+  bookmarks: Bookmark[];
   typeTasks: TypeTaskType[];
   typeTaskSelected: TypeTaskType | null;
   loading: boolean;
   error: boolean;
+  isOpenBookmark: boolean;
 };
 
 type Action = {
@@ -19,6 +25,7 @@ type Action = {
     setDeleteTaskById: (idTask: string) => void;
     setLoading: (loading: boolean) => void;
     setError: (error: boolean) => void;
+    setIsOpenBookmark: (isOpen: boolean) => void;
   };
 };
 
@@ -34,6 +41,18 @@ export const useTaskStore = create<State & Action>((set) => ({
       deadline: 1749357600,
       status: "open",
       typeTask: "My Tasks",
+      bookmarks: [
+        {
+          id: "a1b2c3d4-1234-5678-9101-abcdef123456",
+          idBookmark: "a1b2c3d4-1234-5678-9101-abcdef123456",
+          name: "Important ASAP",
+        },
+        {
+          id: "c3d4e5f6-3344-7788-0099-cdefab345678",
+          idBookmark: "c3d4e5f6-3344-7788-0099-cdefab345678",
+          name: "Virtual Meeting",
+        },
+      ],
     },
     {
       id: "716a93dc-c8cb-4e60-a634-913dbe90519b",
@@ -76,6 +95,18 @@ export const useTaskStore = create<State & Action>((set) => ({
       deadline: 1749612000,
       status: "completed",
       typeTask: "My Tasks",
+      bookmarks: [
+        {
+          id: "e5f6g7h8-5566-9900-2233-efabcd567890",
+          idBookmark: "e5f6g7h8-5566-9900-2233-efabcd567890",
+          name: "Client Related",
+        },
+        {
+          id: "f6g7h8i9-6677-0011-3344-fabcde678901",
+          idBookmark: "f6g7h8i9-6677-0011-3344-fabcde678901",
+          name: "Self Task",
+        },
+      ],
     },
     {
       id: "84e45717-7754-4e76-a4f6-7b46c58a05fc",
@@ -87,6 +118,13 @@ export const useTaskStore = create<State & Action>((set) => ({
       deadline: 1749391200,
       status: "open",
       typeTask: "My Tasks",
+      bookmarks: [
+        {
+          id: "a1b2c3d4-1234-5678-9101-abcdef123456",
+          idBookmark: "a1b2c3d4-1234-5678-9101-abcdef123456",
+          name: "Important ASAP",
+        },
+      ],
     },
     {
       id: "9c9ba416-221f-4b5d-b8a2-251c084c162c",
@@ -200,14 +238,58 @@ export const useTaskStore = create<State & Action>((set) => ({
       name: "Urgent To-Do",
     },
   ],
+  bookmarks: [
+    {
+      id: "a1b2c3d4-1234-5678-9101-abcdef123456",
+      idBookmark: "a1b2c3d4-1234-5678-9101-abcdef123456",
+      name: "Important ASAP",
+    },
+    {
+      id: "b2c3d4e5-2233-6677-9988-bcdefa234567",
+      idBookmark: "b2c3d4e5-2233-6677-9988-bcdefa234567",
+      name: "Offline Meeting",
+    },
+    {
+      id: "c3d4e5f6-3344-7788-0099-cdefab345678",
+      idBookmark: "c3d4e5f6-3344-7788-0099-cdefab345678",
+      name: "Virtual Meeting",
+    },
+    {
+      id: "d4e5f6g7-4455-8899-1122-defabc456789",
+      idBookmark: "d4e5f6g7-4455-8899-1122-defabc456789",
+      name: "ASAP",
+    },
+    {
+      id: "e5f6g7h8-5566-9900-2233-efabcd567890",
+      idBookmark: "e5f6g7h8-5566-9900-2233-efabcd567890",
+      name: "Client Related",
+    },
+    {
+      id: "f6g7h8i9-6677-0011-3344-fabcde678901",
+      idBookmark: "f6g7h8i9-6677-0011-3344-fabcde678901",
+      name: "Self Task",
+    },
+    {
+      id: "g7h8i9j0-7788-1122-4455-abcdef789012",
+      idBookmark: "g7h8i9j0-7788-1122-4455-abcdef789012",
+      name: "Appointments",
+    },
+    {
+      id: "h8i9j0k1-8899-2233-5566-bcdefa890123",
+      idBookmark: "h8i9j0k1-8899-2233-5566-bcdefa890123",
+      name: "Court Related",
+    },
+  ],
   typeTaskSelected: {
     id: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
     idTypeTask: "2f4496a7-93fc-4606-b3ef-382b3a2605b0",
     name: "My Tasks",
   },
+  isOpenBookmark: false,
   loading: false,
   error: false,
   actions: {
+    setIsOpenBookmark: (isOpen) => set({ isOpenBookmark: isOpen }),
     setTasks: (tasks) => set({ tasks }),
     setTypeTasks: (typeTasks) => set({ typeTasks }),
     setTypeTaskSelected: (typeTask) => set({ typeTaskSelected: typeTask }),
@@ -236,6 +318,9 @@ export const useTaskStore = create<State & Action>((set) => ({
   },
 }));
 
+export const useBookmarks = () => useTaskStore((state) => state.bookmarks);
+export const useIsOpenBookmark = () =>
+  useTaskStore((state) => state.isOpenBookmark);
 export const useTasks = () => useTaskStore((state) => state.tasks);
 export const useTypeTasks = () => useTaskStore((state) => state.typeTasks);
 export const useTypeTaskSelected = () =>

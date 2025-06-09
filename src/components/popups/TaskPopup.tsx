@@ -245,7 +245,7 @@ export default function TaskPopup() {
             {tasksState?.map((item, index, arr) => (
               <div
                 key={`task-item-${index}`}
-                className={`${
+                className={`relative ${
                   index !== arr?.length - 1 ? "border-b border-[#828282]" : ""
                 }`}
               >

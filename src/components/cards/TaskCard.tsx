@@ -9,6 +9,8 @@ import TimeBlueIcon from "../../assets/icons/time-blue-icon.svg";
 import PenGrayIcon from "../../assets/icons/pen-gray-icon.svg";
 import PenBlueIcon from "../../assets/icons/pen-blue-icon.svg";
 import CalendarIcon from "../../assets/icons/calendar-icon.svg";
+import BookmarkGrayIcon from "../../assets/icons/bookmarks-gray-icon.svg";
+import BookmarkBlueIcon from "../../assets/icons/bookmarks-blue-icon.svg";
 
 import "react-datepicker/dist/react-datepicker.css";
 import {
@@ -19,17 +21,19 @@ import {
   type KeyboardEvent,
 } from "react";
 import DeleteButton from "../buttons/DeleteButton";
-import type { StatusTaskType, TaskType } from "../../types/taskType";
+import type { Bookmark, StatusTaskType, TaskType } from "../../types/taskType";
 import {
   convertDateTimeToEpoch,
   convertEpochToDate,
   convertEpochToDeadlineDuration,
   formatDate,
 } from "../../utils/datetime";
-import { useTaskActions } from "../../stores/taskStore";
+import { useBookmarks, useTaskActions } from "../../stores/taskStore";
 import { deleteTask, patchTask } from "../../service/task";
+import { bookmarkBackgroundColors } from "../../utils/color";
 
 export default function TaskCard(task: TaskType) {
+  const bookmarks = useBookmarks();
   const { setUpdateTaskById, setDeleteTaskById } = useTaskActions();
 
   const buttonOptionRef = useRef<HTMLButtonElement>(null);
@@ -38,21 +42,27 @@ export default function TaskCard(task: TaskType) {
   const descriptionRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const descriptionPreRef = useRef<HTMLPreElement>(null);
+  const bookmarkRef = useRef<HTMLDivElement>(null);
 
   const [formTaskState, setFormTaskState] = useState<{
     title: string;
     deadline: Date | null;
     description: string;
+    bookmarks: Bookmark[];
   }>({
     title: "",
     deadline: null,
     description: "",
+    bookmarks: [],
   });
   const [isOpenExpandState, setIsOpenExpandState] = useState<boolean>(false);
   const [isOpenOptionState, setIsOpenOptionState] = useState<boolean>(false);
+  const [isOpenBookmarkState, setIsOpenBookmarkState] =
+    useState<boolean>(false);
   const [isEditDesciptionState, setIsEditDescriptionState] =
     useState<boolean>(false);
   const [textareaHeightState, setTextareaHeightState] = useState<number>(33.6);
+  // const [selectedBookmark, setSelectedBookmark] = useState<string[]>([]);
 
   const checkingStatus = (): StatusTaskType => {
     let status: StatusTaskType = "new";
@@ -64,6 +74,12 @@ export default function TaskCard(task: TaskType) {
     }
 
     return status;
+  };
+
+  const isBookmarkSelected = (task: TaskType, bookmark: Bookmark): boolean => {
+    return (task.bookmarks || []).some(
+      (mark) => mark.idBookmark === bookmark.idBookmark
+    );
   };
 
   const handleChangeStatus = async (idTask: string) => {
@@ -83,6 +99,10 @@ export default function TaskCard(task: TaskType) {
 
   const handleOpenOption = () => {
     setIsOpenOptionState(!isOpenOptionState);
+  };
+
+  const handleOpenBookmars = () => {
+    setIsOpenBookmarkState(true);
   };
 
   const handleClickDelete = async (idTask: string) => {
@@ -141,6 +161,36 @@ export default function TaskCard(task: TaskType) {
     }
   };
 
+  const handleAddBookmark = async (bookmark: Bookmark) => {
+    let resultBookmarks;
+    const taskBookmarks = task?.bookmarks || [];
+
+    if (!task) return;
+
+    const exists = taskBookmarks.some(
+      (mark) => mark.idBookmark === bookmark.idBookmark
+    );
+
+    if (exists) {
+      resultBookmarks = taskBookmarks.filter(
+        (mark) => mark.idBookmark !== bookmark.idBookmark
+      );
+    } else {
+      resultBookmarks = [...taskBookmarks, bookmark];
+    }
+
+    try {
+      await patchTask(task?.idTask, {
+        bookmarks: resultBookmarks,
+      });
+      setUpdateTaskById(task?.idTask, {
+        bookmarks: resultBookmarks,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -161,6 +211,7 @@ export default function TaskCard(task: TaskType) {
         description: task.description || "",
         deadline: task.deadline ? convertEpochToDate(task.deadline) : null,
         title: task.title,
+        bookmarks: task.bookmarks || [],
       }));
     }
   };
@@ -219,6 +270,13 @@ export default function TaskCard(task: TaskType) {
           title: task?.title || "",
         }));
       }
+
+      if (
+        bookmarkRef.current &&
+        !bookmarkRef.current.contains(event.target as Node)
+      ) {
+        setIsOpenBookmarkState(false);
+      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -249,8 +307,15 @@ export default function TaskCard(task: TaskType) {
       deadline: task?.deadline ? convertEpochToDate(task.deadline) : null,
       description: task?.description || "",
       title: task?.title || "",
+      bookmarks: task?.bookmarks || [],
     }));
-  }, [task.deadline, task?.description, task.idTask, task?.title]);
+  }, [
+    task?.bookmarks,
+    task.deadline,
+    task?.description,
+    task.idTask,
+    task?.title,
+  ]);
 
   return (
     <div className="py-2.5 flex flex-col gap-2.5 text-[#4f4f4f]">
@@ -277,7 +342,7 @@ export default function TaskCard(task: TaskType) {
               <input
                 ref={titleRef}
                 type="text"
-                className="border rounded-md border-[#828282] text-sm py-1.5 px-2 placeholder:text-[#4f4f4f]"
+                className="border rounded-md border-[#828282] text-sm py-1.5 px-2 placeholder:text-[#4f4f4f] outline-none"
                 placeholder="Type Task Title"
                 value={formTaskState?.title}
                 onChange={(event) => handleChangeTitle(event.target.value)}
@@ -367,7 +432,7 @@ export default function TaskCard(task: TaskType) {
                   <DatePicker
                     selected={formTaskState?.deadline}
                     onChange={(date) => handleChangeDeadline(date)}
-                    className="border border-[#828282] rounded-md text-sm py-1.5 px-2 w-fit max-w-32 placeholder:text-[#4f4f4f]"
+                    className="border border-[#828282] rounded-md text-sm py-1.5 px-2 w-fit max-w-32 placeholder:text-[#4f4f4f] outline-none"
                     showIcon
                     icon={<img src={CalendarIcon} alt="Calendar" />}
                     popperPlacement="bottom-end"
@@ -388,6 +453,7 @@ export default function TaskCard(task: TaskType) {
                   role="button"
                   aria-label="Edit Description"
                   onClick={handleClickDescription}
+                  className="cursor-pointer"
                 >
                   <img
                     src={formTaskState?.description ? PenBlueIcon : PenGrayIcon}
@@ -420,8 +486,70 @@ export default function TaskCard(task: TaskType) {
                     onChange={(e) => handleChangeDescription(e.target.value)}
                     onKeyDown={handleKeyDown}
                     style={{ height: `${textareaHeightState}px` }}
-                    className="border border-[#828282] rounded-md text-sm py-1.5 px-2 w-full placeholder:text-[#4f4f4f] resize-none  max-h-32 text-start"
+                    className="border border-[#828282] rounded-md text-sm py-1.5 px-2 w-full placeholder:text-[#4f4f4f] resize-none  max-h-32 text-start outline-none"
                   />
+                )}
+              </div>
+
+              <div className="flex flex-row w-full gap-4 items-center justify-start bg-[#F9F9F9] rounded-md relative">
+                <button
+                  type="button"
+                  role="button"
+                  aria-label="Bookmarks"
+                  onClick={handleOpenBookmars}
+                  className="cursor-pointer"
+                >
+                  <img
+                    src={
+                      formTaskState?.bookmarks?.length
+                        ? BookmarkBlueIcon
+                        : BookmarkGrayIcon
+                    }
+                    alt="Bookmars"
+                    className="w-4 h-4 min-w-4 min-h-4 mt-0.5"
+                  />
+                </button>
+
+                <div className="flex flex-row w-full gap-4  items-center justify-start">
+                  {!!formTaskState?.bookmarks?.length &&
+                    formTaskState?.bookmarks?.map((bookmark, index) => (
+                      <div
+                        key={`${bookmark?.name}-${index}`}
+                        className={`py-1.5 px-2 rounded-md flex items-center justify-center ${bookmarkBackgroundColors(
+                          bookmark?.name
+                        )}`}
+                      >
+                        <p className="text-xs font-semibold">
+                          {bookmark?.name}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+
+                {isOpenBookmarkState && (
+                  <div
+                    ref={bookmarkRef}
+                    className="w-full max-w-[277px] h-fit flex flex-col gap-2 absolute top-[115%] left-0 bg-white shadow-md border border-[#828282] rounded-sm py-2.5 px-3 z-20"
+                  >
+                    {bookmarks?.map((bookmark, index) => (
+                      <button
+                        key={`${bookmark?.name}-${index}`}
+                        role="button"
+                        className={`cursor-pointer py-1.5 px-2 rounded-md flex items-center justify-start shadow-sm transition-colors duration-200 ease-in-out
+                        ${bookmarkBackgroundColors(bookmark?.name)}
+                        ${
+                          isBookmarkSelected(task, bookmark)
+                            ? "border border-[#2F80ED]"
+                            : ""
+                        }`}
+                        onClick={() => handleAddBookmark(bookmark)}
+                      >
+                        <p className="text-sm text-start font-semibold">
+                          {bookmark?.name}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
             </div>

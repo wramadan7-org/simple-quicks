@@ -7,6 +7,13 @@ export type TaskType = {
   deadline?: number;
   status: StatusTaskType;
   typeTask: string;
+  bookmarks?: Bookmark[];
+};
+
+export type Bookmark = {
+  id: string;
+  idBookmark: string;
+  name: string;
 };
 
 export type StatusTaskType = "completed" | "open" | "new";
