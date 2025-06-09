@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import QuicksLayout from "../layouts/QuicksLayout";
 import FundationPage from "../pages/FundationPage";
+import BonusPage from "../pages/BonusPage";
 
 const routes = createBrowserRouter([
   {
@@ -9,6 +10,10 @@ const routes = createBrowserRouter([
       {
         index: true,
         Component: FundationPage,
+      },
+      {
+        path: "/bonus",
+        Component: BonusPage,
       },
     ],
   },

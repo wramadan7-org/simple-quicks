@@ -65,7 +65,7 @@ const useInboxStore = create<State & Action>((set) => ({
       idChat: "1234-1234-3221-9302",
       status: "read",
       name: null,
-      from: "You",
+      from: "FastVisa Support",
       message: "Hi, I need help with something can you help me ?",
       datetime: 1622524800,
       groupCategory: "system",

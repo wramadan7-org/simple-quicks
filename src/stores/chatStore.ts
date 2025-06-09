@@ -195,7 +195,7 @@ const chatStore = create<State & Action>((set) => ({
       isReply: false,
       isNew: false,
       isRead: true,
-      groupCategory: "user",
+      groupCategory: "system",
     },
   ],
   loading: false,

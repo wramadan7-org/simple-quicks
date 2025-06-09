@@ -279,7 +279,10 @@ export default function InboxPopup() {
       isReply: false,
       isNew: false,
       isRead: true,
-      groupCategory: "user" as GroupCategoryType,
+      groupCategory: (inboxSelected?.idInbox ===
+      "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a"
+        ? "system"
+        : "user") as GroupCategoryType,
     };
 
     try {
@@ -302,7 +305,10 @@ export default function InboxPopup() {
       const payloadInbox = {
         ...inboxSelected,
         idChat: uuid,
-        name: "You",
+        name:
+          inboxSelected?.idInbox === "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a"
+            ? null
+            : "You",
         status: "read",
         message: messageState,
         datetime: Number(convertDateTimeToEpoch(new Date())),

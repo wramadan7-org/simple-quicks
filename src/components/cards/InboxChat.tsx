@@ -101,20 +101,20 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
       await deleteChat(chat.idChat);
       setDeleteChatById(chat.idChat);
 
-      console.log("DELETE", chat);
       if (chat.idInbox !== inboxSelected?.idInbox) return;
-
-      console.log("SAMA");
 
       const sortedChats = chats
         ?.filter((item) => item?.idInbox === inboxSelected?.idInbox)
         ?.sort((a, b) => a.datetime - b.datetime);
       const lastChat = sortedChats?.[sortedChats.length - 2];
-      console.log("LAST: ", lastChat);
+
       const payloadInbox = {
         ...inboxSelected,
         message: lastChat?.message,
-        name: lastChat?.name,
+        name:
+          inboxSelected?.idInbox === "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a"
+            ? null
+            : lastChat?.name,
         datetime: lastChat?.datetime,
         idChat: lastChat?.idChat,
       };
@@ -158,7 +158,10 @@ export default function InboxChat({ type, chat }: InboxChatProps) {
         const payloadInbox = {
           ...inboxSelected,
           message: messageState,
-          name: chatSelected?.name,
+          name:
+            inboxSelected?.idInbox === "d96059f8-0e40-41a0-9dc3-4a21f16e1d9a"
+              ? null
+              : chatSelected?.name,
         };
 
         setUpdateInboxById(inboxSelected?.idInbox, payloadInbox);
